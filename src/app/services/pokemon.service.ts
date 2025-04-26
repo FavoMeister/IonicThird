@@ -26,12 +26,13 @@ export class PokemonService {
       return CapacitorHttp.get(options).then(async (response) => {
         let pokemons: Pokemon[] = [];
 
-        console.log(response);
+        console.log("Response Service", response);
 
         if (response.data) {
-          const results = response.data.resuslts;
+          const results = response.data.results;
           this.nextUrl = response.data.next;
-
+          console.log("Resultados Services ", results);
+          
           const promises: Promise<HttpResponse>[] = [];
 
           for (let index = 0; index < results.length; index++) {
@@ -48,7 +49,7 @@ export class PokemonService {
             console.log(responses);
             for (const response of responses) {
               const pokemonData = response.data;
-              console.log(pokemonData);
+              console.log("pokemon Data Service: ", pokemonData);
 
               const pokemonObj = new Pokemon();
 
@@ -58,18 +59,18 @@ export class PokemonService {
               if (pokemonData.types[1]) {
                 pokemonObj.type2 = pokemonData.types[1].type.name;
               }
-              pokemonObj.sprite = pokemonData.sprite.front_default;
+              pokemonObj.sprite = pokemonData.sprites.front_default;
               pokemonObj.weight = pokemonData.weight / 10;
               pokemonObj.height = pokemonData.height / 10;
 
               pokemonObj.stats = pokemonData.stats;
 
-              pokemonObj.abilities = pokemonData.abilities.filter(ab => !ab.is_hidden).map(ab => ab.abilitie.name);
+              pokemonObj.abilities = pokemonData.abilities.filter(ab => !ab.is_hidden).map(ab => ab.ability.name);
 
               const hiddenAbility = pokemonData.abilities.find(ab => ab.is_hidden);
 
               if (hiddenAbility) {
-                pokemonObj.hiddenAbility = hiddenAbility.abilitie.nmae
+                pokemonObj.hiddenAbility = hiddenAbility.ability.name
               }
 
               pokemons.push(pokemonObj);

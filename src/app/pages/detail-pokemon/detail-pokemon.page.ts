@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, NavController, NavParams } from '@ionic/angular';
+import { Pokemon } from 'src/app/models/pokemon';
 
 @Component({
   selector: 'app-detail-pokemon',
@@ -9,11 +10,23 @@ import { IonicModule } from '@ionic/angular';
   imports: [CommonModule, IonicModule],
   standalone: true,
 })
-export class DetailPokemonPage implements OnInit {
+export class DetailPokemonPage {
 
-  constructor() { }
+  public pokemon: Pokemon
+  
+  constructor(
+    private navParamas: NavParams,
+    private navController: NavController
+  ) { 
+    this.pokemon = this.navParamas.data["pokemon"];
+    console.log(this.pokemon);
+    
+  }
 
   ngOnInit() {
   }
 
+  goBack(){
+    this.navController.pop(); // Like remove the detail route
+  }
 }
